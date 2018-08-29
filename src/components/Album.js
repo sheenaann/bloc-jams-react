@@ -92,5 +92,4 @@ selectIcon(song, index) {
     );
   }
 }
-
 export default Album;
