@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import albumData from './../data/albums';
+import Ionicon from 'react-ionicons';
+import PlayerBar from './PlayerBar';
 
 class Album extends Component {
   constructor(props){
@@ -11,7 +13,8 @@ class Album extends Component {
   this.state ={
     album: album,
     currentSong: album.songs[0],
-    isPlaying: false
+    isPlaying: false,
+    hoveredSong: null
   };
   this.audioElement = document.createElement('audio');
   this.audioElement.src = album.songs[0].audioSrc;
@@ -38,6 +41,34 @@ handleSongClick(song){
     this.play();
   }
 }
+
+handlePrevClick() {
+const currentIndex = this.state.album.songs.findIndex(song => this.state.currentSong === song);
+const newIndex = Math.max(0, currentIndex-1);
+const newSong = this.state.album.songs[newIndex];
+this.setSong(newSong);
+this.play();
+}
+
+handleMouseEnter(song) {
+  this.setState({
+    hoveredSong:song
+  });
+}
+handleMouseLeave(song){
+  this.setState({
+    hoveredSong:song
+  });
+}
+selectIcon(song, index) {
+  if (!this.state.isPlaying && song === this.state.hoveredSong){
+    return <span className='ion-md-play'></span>
+  } else if (this.state.isPlaying && song === this.state.hoveredSong && song === this.state.currentSong) {
+    return <span className='ion-md-pause'></span>
+  } else {
+    return <span>{index+1}</span>
+}
+}
   render() {
     return(
       <section className="album">
@@ -58,8 +89,8 @@ handleSongClick(song){
   <tbody>
   {
   this.state.album.songs.map( (song, index) =>
-<tr className="song" key={index} onClick={() => this.handleSongClick(song)} >
-  <td>{index +1}</td>
+  <tr className="song" key={index} onClick={() => this.handleSongClick(song)}>
+  <td onMouseEnter={ () => this.handleMouseEnter(song)} onMouseLeave={ () => this.handleMouseLeave(song)}>{this.selectIcon(song, index)}</td>
   <td>{song.title}</td>
   <td>{song.duration}</td>
   </tr>
@@ -67,6 +98,12 @@ handleSongClick(song){
 }
   </tbody>
 </table>
+<PlayerBar
+    isPlaying={this.state.isPlaying}
+    currentSong={this.state.currentSong}
+    handleSongClick={() => this.handleSongClick(this.state.currentSong)}
+    handlePrevClick={() => this.handlePrevClick()}
+    />
       </section>
     );
   }
