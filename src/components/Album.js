@@ -15,7 +15,7 @@ class Album extends Component {
     isPlaying: false,
     hoveredSong: null,
     currentTime: 0,
-    duration: album.songs[0].duration
+    duration: album.songs[0].duration,
   };
   this.audioElement = document.createElement('audio');
   this.audioElement.src = album.songs[0].audioSrc;
@@ -28,6 +28,9 @@ componentDidMount () {
     },
     durationchange: e => {
       this.setState({duration: this.audioElement.duration});
+    },
+    volumechange: e => {
+      this.setState({currentVolume: this.audioElement.currentVolume});
     }
   };
   this.audioElement.addEventListener('timeupdate', this.eventListeners.timeupdate);
@@ -88,7 +91,7 @@ handleTimeChange(e) {
 handleVolumeChange(e) {
   const newVolume = e.target.value;
   this.audioElement.volume = newVolume;
-  this.setState({ volume: newVolume });
+  this.setState({volume: newVolume});
 }
 
 formatTime(time){
@@ -158,6 +161,7 @@ selectIcon(song, index) {
     handleNextClick={() => this.handleNextClick()}
     handleTimeChange={(e) => this.handleTimeChange(e)}
     handleVolumeChange={(e) => this.handleVolumeChange(e)}
+    currentVolume={this.state.currentVolume}
     formatTime={ (time) => this.formatTime(time)}
     />
       </section>
