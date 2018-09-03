@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import albumData from './../data/albums';
 import Ionicon from 'react-ionicons';
-<<<<<<< HEAD
 import PlayerBar from './PlayerBar';
-=======
->>>>>>> 4971fceeb6e4bdb15f2978b23c607ca633f4da1a
 
 class Album extends Component {
   constructor(props){
@@ -44,7 +41,6 @@ handleSongClick(song){
     this.play();
   }
 }
-<<<<<<< HEAD
 
 handlePrevClick() {
 const currentIndex = this.state.album.songs.findIndex(song => this.state.currentSong === song);
@@ -54,8 +50,6 @@ this.setSong(newSong);
 this.play();
 }
 
-=======
->>>>>>> 4971fceeb6e4bdb15f2978b23c607ca633f4da1a
 handleMouseEnter(song) {
   this.setState({
     hoveredSong:song
@@ -95,13 +89,8 @@ selectIcon(song, index) {
   <tbody>
   {
   this.state.album.songs.map( (song, index) =>
-<<<<<<< HEAD
-  <tr className="song" key={index} onClick={() => this.handleSongClick(song)}>
-  <td onMouseEnter={ () => this.handleMouseEnter(song)} onMouseLeave={ () => this.handleMouseLeave(song)}>{this.selectIcon(song, index)}</td>
-=======
 <tr className="song" key={index} onClick={() => this.handleSongClick(song)}>
 <td onMouseEnter={ () => this.handleMouseEnter(song)} onMouseLeave={ () => this.handleMouseLeave(song)}>{this.selectIcon(song, index)}</td>
->>>>>>> 4971fceeb6e4bdb15f2978b23c607ca633f4da1a
   <td>{song.title}</td>
   <td>{song.duration}</td>
   </tr>
