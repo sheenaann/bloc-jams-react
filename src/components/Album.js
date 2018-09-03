@@ -28,9 +28,6 @@ componentDidMount () {
     },
     durationchange: e => {
       this.setState({duration: this.audioElement.duration});
-    },
-    volumechange: e => {
-      this.setState({currentVolume: this.audioElement.currentVolume});
     }
   };
   this.audioElement.addEventListener('timeupdate', this.eventListeners.timeupdate);
