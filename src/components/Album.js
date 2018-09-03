@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import albumData from './../data/albums';
-import Ionicon from 'react-ionicons';
 import PlayerBar from './PlayerBar';
 
 class Album extends Component {
@@ -16,7 +15,8 @@ class Album extends Component {
     isPlaying: false,
     hoveredSong: null,
     currentTime: 0,
-    duration: album.songs[0].duration
+    duration: album.songs[0].duration,
+    currentVolume: .50
   };
   this.audioElement = document.createElement('audio');
   this.audioElement.src = album.songs[0].audioSrc;
@@ -29,16 +29,21 @@ componentDidMount () {
     },
     durationchange: e => {
       this.setState({duration: this.audioElement.duration});
+    },
+    volumechange: e => {
+      this.setState({currentVolume: this.audioElement.currentVolume});
     }
   };
   this.audioElement.addEventListener('timeupdate', this.eventListeners.timeupdate);
   this.audioElement.addEventListener('durationchange', this.eventListeners.durationchange);
+  this.audioElement.addEventListener('volumechange', this.eventListeners.volumechange);
 }
 
 componentWillUnmount () {
   this.audioElement.src= null;
   this.audioElement.removeEventListener('timeupdate', this.eventListeners.timeupdate);
   this.audioElement.removeEventListener('durationchange', this.eventListeners.durationchange);
+  this.audioElement.removeEventListener('volumechange', this.eventListeners.volumechange);
 }
 
 play() {
@@ -86,6 +91,21 @@ handleTimeChange(e) {
   this.setState({currentTime: newTime});
 }
 
+handleVolumeChange(e) {
+  const newVolume = e.target.value;
+  this.audioElement.currentVolume = newVolume;
+  this.setState({currentVolume: newVolume});
+}
+
+formatTime(time){
+    const min = Math.floor(time/60);
+    const sec = (time - min * 60).toFixed(0);
+    const formattedTime = min+':'+sec;
+    if(isNaN(time)){
+      return '-:--'}
+    return formattedTime;
+}
+
 handleMouseEnter(song) {
   this.setState({
     hoveredSong:song
@@ -128,7 +148,7 @@ selectIcon(song, index) {
 <tr className="song" key={index} onClick={() => this.handleSongClick(song)}>
 <td onMouseEnter={ () => this.handleMouseEnter(song)} onMouseLeave={ () => this.handleMouseLeave(song)}>{this.selectIcon(song, index)}</td>
   <td>{song.title}</td>
-  <td>{song.duration}</td>
+  <td>{this.formatTime(song.duration)}</td>
   </tr>
 )
 }
@@ -143,6 +163,9 @@ selectIcon(song, index) {
     handlePrevClick={() => this.handlePrevClick()}
     handleNextClick={() => this.handleNextClick()}
     handleTimeChange={(e) => this.handleTimeChange(e)}
+    handleVolumeChange={(e) => this.handleVolumeChange(e)}
+    currentVolume={this.state.currentVolume}
+    formatTime={ (time) => this.formatTime(time)}
     />
       </section>
     );
