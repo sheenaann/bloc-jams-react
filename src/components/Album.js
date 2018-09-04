@@ -93,7 +93,10 @@ handleVolumeChange(e) {
 
 formatTime(time){
     const min = Math.floor(time/60);
-    const sec = (time - min * 60).toFixed(0);
+    var sec = (time - min * 60).toFixed(0);
+    if(sec < 10) {
+      sec = "0" + sec;
+    }
     const formattedTime = min+':'+sec;
     if(isNaN(time)){
       return '-:--'}
